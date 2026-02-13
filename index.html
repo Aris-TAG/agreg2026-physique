@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Agreg 2026 Générateur Leçons</title>
+    <style>
+        :root {
+            --physique-color: #0056b3;
+            --chimie-color: #009688;
+            --montage-color: #e65100;
+            --bg-color: #f4f4f9;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+
+        h1 { font-size: 1.5rem; color: #333; margin-bottom: 30px; }
+        
+        /* Menu Principal */
+        #menu { display: flex; flex-direction: column; gap: 20px; width: 100%; max-width: 400px; }
+        
+        .menu-btn {
+            border: none;
+            padding: 20px;
+            border-radius: 15px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.1s;
+        }
+        .menu-btn:active { transform: scale(0.98); }
+
+        .btn-phys { background-color: var(--physique-color); }
+        .btn-chim { background-color: var(--chimie-color); }
+        .btn-mont { background-color: var(--montage-color); }
+
+        /* Écrans de tirage */
+        .screen {
+            display: none;
+            width: 100%;
+            max-width: 500px;
+            background: white;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .screen.active { display: flex; }
+
+        .header-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9rem;
+            align-self: center;
+            margin-bottom: 10px;
+        }
+
+        .label { font-size: 0.85rem; text-transform: uppercase; color: #888; letter-spacing: 1px; margin-top: 10px;}
+        .content { font-size: 1.1rem; font-weight: 500; color: #333; line-height: 1.4; padding: 15px; background: #f9f9f9; border-radius: 8px; border: 1px solid #eee; word-wrap: break-word; }
+        
+        .big-code { font-size: 3rem; font-weight: 800; color: var(--montage-color); margin: 10px 0; }
+        .chem-level { background-color: #00bcd4; color: white; padding: 8px; border-radius: 8px; font-weight: bold; }
+
+        /* Boutons d'action */
+        .action-area { margin-top: 20px; display: flex; flex-direction: column; gap: 10px; }
+        
+        .btn-reroll {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .btn-back {
+            background-color: transparent;
+            color: #666;
+            border: 2px solid #ddd;
+            padding: 10px;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="menu">
+        <h1>🎓 Prép'Agreg Physique</h1>
+        <button class="menu-btn btn-phys" onclick="openMode('physique')">Leçons de Physique ⚛️</button>
+        <button class="menu-btn btn-chim" onclick="openMode('chimie')">Leçons de Chimie 🧪</button>
+        <button class="menu-btn btn-mont" onclick="openMode('montage')">Montages ⚡</button>
+    </div>
+
+    <div id="screen-physique" class="screen">
+        <div class="header-badge" style="background: var(--physique-color)">Physique</div>
+        
+        <div class="label">Sujet</div>
+        <div id="phys-title" class="content">...</div>
+        
+        <div class="label">Passage Obligé</div>
+        <div id="phys-po" class="content" style="font-style: italic;">...</div>
+
+        <div class="action-area">
+            <button class="btn-reroll" onclick="drawPhysique()">🎲 Nouveau Tirage</button>
+            <button class="btn-back" onclick="goHome()">🏠 Menu</button>
+        </div>
+    </div>
+
+    <div id="screen-chimie" class="screen">
+        <div class="header-badge" style="background: var(--chimie-color)">Chimie</div>
+        
+        <div class="label">Niveau</div>
+        <div id="chem-level" class="chem-level">...</div>
+
+        <div class="label">Titre</div>
+        <div id="chem-title" class="content">...</div>
+        
+        <div class="label">Élément Imposé</div>
+        <div id="chem-element" class="content" style="font-style: italic;">...</div>
+
+        <div class="action-area">
+            <button class="btn-reroll" onclick="drawChimie()">🧪 Nouveau Tirage</button>
+            <button class="btn-back" onclick="goHome()">🏠 Menu</button>
+        </div>
+    </div>
+
+    <div id="screen-montage" class="screen">
+        <div class="header-badge" style="background: var(--montage-color)">Montage</div>
+        
+        <div id="mont-code" class="big-code">M??</div>
+        
+        <div class="label">Titre du Montage</div>
+        <div id="mont-title" class="content">...</div>
+
+        <div class="action-area">
+            <button class="btn-reroll" onclick="drawMontage()">⚡ Nouveau Tirage</button>
+            <button class="btn-back" onclick="goHome()">🏠 Menu</button>
+        </div>
+    </div>
+
+    <script>
+        // --- DONNÉES PHYSIQUE ---
+        const physicsData = {
+            "Approximations quasi stationnaires dans différents domaines de la physique": ["Discuter le lien entre l'ARQS et la notion de résistance thermique en diffusion thermique.", "Présenter, en justifiant les choix pédagogiques effectués, l'énoncé et la résolution d'un exercice portant sur la diffusion de particules à travers une membrane."],
+            "Bilans d'entropie et phénomènes irréversibles": ["Illustrer le lien entre la notion d'entropie et celle de rendement d'une machine thermique.", "Proposer et traiter une situation permettant d'illustrer la formule de Boltzmann de l'entropie."],
+            "Bilans macroscopiques en mécanique des fluides": ["Présenter, en justifiant les choix pédagogiques effectués, l'énoncé et la résolution d'un exercice sur le système de propulsion d'une fusée."],
+            "Capacités thermiques : modèles microscopiques et conséquences macroscopiques": ["Présenter le modèle d'Einstein des solides."],
+            "Cavité optique": ["Présenter la notion de finesse pour un interféromètre Fabry Pérot"],
+            "Champ magnétique terrestre. Caractérisation et conséquences": ["Mettre en équation le mouvement de l'aiguille d'une boussole et proposer des ordres de grandeur."],
+            "Champs magnétiques engendrés par des courants stationnaires": ["Traiter le cas du champ magnétique dans l'entrefer d'un électro-aimant."],
+            "Coefficients d'Einstein. Bilan de puissance pour un système à deux niveaux soumis à une onde électromagnétique plane": ["Montrer l'importance de l'inversion de population dans le fonctionnement d'un laser"],
+            "Conduction électrique": ["Présenter le modèle de Drude et ses applications ainsi que ses limites."],
+            "Constante de Planck": ["Présenter l'effet photoélectrique", "Établir le lien entre l'équation de Schrödinger et les relations de de Broglie et Planck-Einstein"],
+            "Constantes fondamentales et système d'unités": ["Présenter, en justifiant les choix pédagogiques effectués, l'énoncé et la résolution d'un exercice portant sur une méthode de mesure historique d'une constante fondamentale."],
+            "Conversion analogique numérique": ["Réaliser l'étude d'un circuit électronique réalisant la conversion analogique numérique d'un signal"],
+            "Conversion électromécanique de puissance": ["Établir et expliquer le bilan entre la puissance électrique de la force électromotrice induite et la puissance mécanique des actions de Laplace."],
+            "Conversion électronique de puissance": ["Présenter le principe et une application d'un onduleur monophasé"],
+            "Convertisseurs électromécaniques en rotation": ["Produire un champ magnétique tournant à l'aide de matériel usuel en électrocinétique"],
+            "Diagrammes thermodynamiques des fluides réels purs": ["Présenter l'énoncé et la résolution d'un exercice utilisant deux diagrammes thermodynamiques différents pour une machine thermique dont le fonctionnement repose sur un changement d'état."],
+            "Diffusion de particules": ["Proposer l'énoncé et la résolution d'un exercice établissant la loi de Stokes-Einstein pour le coefficient de diffusion en étudiant une situation de sédimentation.", "Obtenir l'équation de diffusion à partir d'une marche aléatoire unidimensionnelle."],
+            "Dipôles électriques et applications": ["Présenter un modèle de polarisabilité des atomes."],
+            "Dispersion et absorption": ["Établir une expression de l'indice de réfraction d'un milieu diélectrique peu dense à l'aide du modèle de l'électron élastiquement lié.", "Illustrer expérimentalement les phénomènes de dispersion et d'absorption"],
+            "Dualité onde-corpuscule": ["Établir l'expression de l'angle caractéristique de diffraction par une fente à partir de la relation de de Broglie et de l'inégalité d'Heisenberg."],
+            "Dynamique dans le référentiel terrestre": ["Présenter un effet mettant en jeu la force de Coriolis"],
+            "Dynamique dans un champ de gravitation newtonien": ["Établir la troisième loi de Kepler dans le cas d'une orbite elliptique"],
+            "Échantillonnage et analyse de Fourier d'un signal": ["Choisir les paramètres (durée, nombre d'échantillons, fréquence d'échantillonnage) d'une acquisition numérique sur un exemple concret."],
+            "Écoulement autour d'un objet": ["Présenter le principe de l'effet Magnus et une application."],
+            "Effet de peau": ["Discuter les conséquences de l'effet de peau pour la conduction électrique par les fils."],
+            "Effet Doppler. Applications": ["Présenter l'application de l'effet Doppler non relativiste aux radars routiers (fréquence d'émission 24 GHz) et en discuter les ordres de grandeur."],
+            "Énergie du champ électromagnétique": ["Présenter l'énoncé et la résolution d'un exercice présentant le couplage inductif résonant (par exemple plaques à induction)."],
+            "Équations d'état de fluides et modélisations associées": ["Sur un exemple, expliquer le principe de calcul des propriétés thermodynamiques d'un système : énergie interne, enthalpie, entropie, capacité calorifique à partir d'une équation d'état."],
+            "Équilibre et mouvement dans un champ de force centrale conservative": ["Démontrer le théorème du viriel et présenter une application."],
+            "Exemples de phénomènes non linéaires. Applications": ["Présenter et expliquer le principe d'un résonateur paramétrique"],
+            "Exemples de principes variationnels. Applications": ["Présenter, en justifiant les choix pédagogiques effectués, l'énoncé et la résolution d'un exercice portant sur la courbe brachistochrone"],
+            "Exemples d'effets relativistes. Applications.": ["Présenter l'effet Doppler relativiste dans un contexte lié à l'astrophysique"],
+            "Facteur de Boltzmann. Exemples": ["Présenter, en justifiant les choix pédagogiques effectués, l'énoncé et la résolution d'un exercice contextualisé utilisant la distribution de Maxwell-Boltzmann des vitesses."],
+            "Filtrage linéaire en électronique analogique et numérique": ["À l'aide du code fourni, illustrer le principe de la simulation numérique du filtrage par décomposition spectrale d'un signal analogique."],
+            "Force de Lorentz": ["Présenter l'effet Hall.", "Présenter le principe d'un synchrotron."],
+            "Force de marée": ["Discuter de l'influence de la Lune et du Soleil sur les marées océaniques à la surface de la Terre."],
+            "Forces de frottements": ["Discuter les analogies et différences entre frottement solide et frottement fluide."],
+            "Forces de traînée et de portance": ["Présenter l'énoncé et la résolution d'un exercice exploitant différents domaines du graphe représentant le coefficient de traînée en fonction du nombre de Reynolds."],
+            "Forces newtoniennes": ["Présenter la méthode de détection d'exoplanètes par vitesse radiale"],
+            "Gravitation": ["Présenter, en justifiant les choix pédagogiques effectués, l'énoncé et la résolution d'un exercice expliquant les possibles anomalies locales du champ de gravitation terrestre."],
+            "Hystérésis et bistabilité dans différents domaines de la physique": ["Expliquer le principe de fonctionnement d'un oscillateur à relaxation"],
+            "Induction électromagnétique": ["Présenter le principe du freinage par induction et l'illustrer expérimentalement.", "Illustrer l'intérêt du feuilletage pour des applications électrotechniques à base de matériaux ferromagnétiques."],
+            "Interférences à division d'amplitude": ["Présenter un exemple qui explique les couleurs interférentielles."],
+            "Interféromètre de Michelson": ["Présenter le principe de la spectroscopie par transformée de Fourier à l'aide d'un Michelson.", "Présenter, en justifiant les choix pédagogiques effectués, l'énoncé et la résolution d'un exercice illustrant une mesure de distance ou d'épaisseur"],
+            "Introduction à la mécanique quantique": ["Expliquer l'importance du modèle du corps noir dans le développement de la mécanique quantique"],
+            "Lasers": ["Présenter la notion de cohérence temporelle et ses conséquences."],
+            "Loi de Coulomb du frottement solide": ["Étudier l'évolution d'un système masse-ressort amorti par frottement solide."],
+            "Lois de conservation en mécanique. Applications": ["Illustrer une loi de conservation grâce à l'utilisation de mobiles sur coussins d'air"],
+            "Machine synchrone": ["Présenter le diagramme de Fresnel relatif au schéma électrique équivalent d'une phase de la machine"],
+            "Magnétisme dans les milieux": ["Présenter, en justifiant les choix pédagogiques effectués, l'énoncé et la résolution d'un exercice portant sur le magnéton de Bohr.", "Présenter la loi de Curie et en proposer une interprétation microscopique."],
+            "Microscopies": ["Comparer le pouvoir de résolution de deux types de microscopes"],
+            "Modèle de l'écoulement parfait et théorèmes de Bernoulli": ["Présenter, en justifiant les choix pédagogiques effectués, l'énoncé et la résolution d'un exercice traitant de différents régimes d'écoulement dans un cours d'eau"],
+            "Modèles de l'atome": ["Présenter l'effet Zeeman et une de ses applications."],
+            "Mouvement au voisinage d'un équilibre": ["Présenter, en justifiant les choix pédagogiques effectués, l'énoncé et la résolution d'un exercice illustrant la notion de stabilité d'un point d'équilibre"],
+            "Niveaux d'énergie d'un atome": ["Présenter, en justifiant les choix pédagogiques effectués, l'énoncé et la résolution d'un exercice portant sur le modèle de Bohr et illustrer ses limites."],
+            "Notion de cohérence en optique": ["Exploiter la manipulation de l'interféromètre de Michelson éclairé par le doublet du sodium afin de calculer deux longueurs d'onde."],
+            "Noyau atomique. Isotopes. Radioactivité.": ["Présenter, en justifiant les choix pédagogiques effectués, l'énoncé et la résolution d'un exercice portant sur la séparation d'isotopes"],
+            "Numérisation d'un signal analogique": ["Présenter, en justifiant les choix pédagogiques effectués, l'énoncé et la résolution d'un exercice exploitant le critère de Shannon."],
+            "Observations astronomiques": ["Présenter, en justifiant les choix pédagogiques effectués, l'énoncé et la résolution d'un exercice permettant de déterminer le grossissement et le champ d'un télescope."],
+            "Ondes acoustiques": ["Illustrer expérimentalement la notion d'ondes stationnaires."],
+            "Ondes de gravité dans un fluide incompressible": ["Présenter un modèle unidimensionnel de propagation en eau peu profonde"],
+            "Ondes électromagnétiques dans les milieux": ["Présenter une situation donnant lieu à des ondes évanescentes"],
+            "Ondes mécaniques dans les solides": ["Établir l'équation de propagation d'ondes mécaniques dans un solide en introduisant un modèle à l'échelle microscopique."],
+            "Ondes stationnaires": ["Présenter, en justifiant les choix pédagogiques effectués, l'énoncé et la résolution d'un exercice traitant du trombone de Koenig."],
+            "Optique géométrique": ["Étudier la propagation d'un rayon lumineux dans un milieu stratifié"],
+            "Oscillateurs couplés": ["Présenter les analogies et les différences du couplage entre deux oscillateurs en physique classique et entre deux états en mécanique quantique."],
+            "Oscillations autoentretenues d'un système bouclé": ["Présenter à l'aide du code fourni le comportement d'un oscillateur quasi sinusoïdal et mettre en évidence l'influence des non-linéarités"],
+            "Pertes de charge dans une conduite à section circulaire": ["Introduire la résistance hydraulique, l'analogie avec la conduction électrique et ses limites"],
+            "Phénomènes de diffraction": ["Établir le lien entre la diffraction en optique et le principe d'incertitude de Heisenberg appliqué à un photon."],
+            "Phénomènes de diffusion": ["Illustrer à l'aide d'une expérience le lien entre les grandeurs caractéristiques mises en jeu dans une équation de diffusion."],
+            "Phénomènes interfaciaux": ["Expliquer et mettre en œuvre une mesure de tension de surface.", "Décrire et analyser le phénomène de nucléation responsable des retards aux transitions de phase."],
+            "Photographie. Capteurs numériques": ["Discuter de l'influence du diaphragme sur la qualité d'une photographie"],
+            "Polarisation des ondes électromagnétiques": ["Présenter et illustrer expérimentalement la notion de pouvoir rotatoire d'un milieu", "Présenter et illustrer expérimentalement la loi de Malus"],
+            "Potentiels thermodynamiques et conditions d'équilibre": ["Présenter l'étude d'un système métastable"],
+            "Principe et applications de la résonance magnétique nucléaire": ["Présenter et illustrer le principe de la spectroscopie RMN"],
+            "Principes d'évolution en thermodynamique": ["Présenter, en justifiant les choix pédagogiques effectués, l'énoncé et la résolution d'un exercice illustrant l'intérêt du potentiel chimique dans l'étude d'une transformation."],
+            "Production de froid": ["Présenter l'énoncé et la résolution d'un exercice exploitant un diagramme thermodynamique pour étudier une machine frigorifique ditherme."],
+            "Production éolienne d'énergie électrique": ["Illustrer l'impact de la vitesse du vent sur le rendement d'une installation éolienne"],
+            "Production nucléaire d'énergie électrique": ["Présenter l'énoncé et la résolution d'un exercice permettant de justifier l'ordre de grandeur du rendement thermodynamique d'un réacteur nucléaire à eau pressurisée."],
+            "Production photovoltaïque d'énergie électrique": ["Exploiter la caractéristique électrique d'une cellule photovoltaïque."],
+            "Propagation guidée": ["Présenter le principe du guidage d'une onde transverse électromagnétique dans un câble coaxial."],
+            "Propriétés des plasmas dilués": ["Proposer un modèle détaillant la réflexion d'une onde électromagnétique sur l'ionosphère et ses conséquences sur les télécommunications"],
+            "Puits de potentiel en physique quantique": ["Présenter, en justifiant les choix pédagogiques effectués, l'énoncé et la résolution d'un exercice contextualisé utilisant le puits quantique infini."],
+            "Rayonnement dipolaire électrique": ["Présenter le principe d'une antenne demi-onde.", "Étudier la diffusion Rayleigh à l'aide du modèle de l'électron élastiquement lié."],
+            "Rayonnement du corps noir": ["Présenter, en justifiant les choix pédagogiques effectués, l'énoncé et la résolution d'un exercice contextualisé modélisant l'effet de serre"],
+            "Réflexion et réfraction à l'interface entre deux milieux diélectriques non absorbants": ["Présenter, en justifiant les choix pédagogiques effectués, l'énoncé et la résolution d'un exercice traitant de la réflexion totale."],
+            "Résonances": ["Présenter une expérience mettant en jeu un oscillateur mécanique résonant et réaliser une évaluation numérique de son facteur de qualité."],
+            "Solide en rotation autour d'un axe fixe": ["Présenter l'équilibrage statique et dynamique"],
+            "Statique des fluides": ["Présenter le modèle de l'atmosphère isotherme et en discuter les limites.", "Présenter, en justifiant les choix pédagogiques effectués, l'énoncé et la résolution d'un exercice établissant le lien entre les forces de pression et la poussée d'Archimède."],
+            "Système à deux niveaux": ["Étudier le cas du spin 1/2 dans un champ magnétique et présenter une conséquence expérimentale macroscopique ."],
+            "Théorie cinétique des gaz.": ["Présenter l'énoncé et la résolution d'un exercice contextualisé traitant de l'effusion"],
+            "Thermodynamique des gaz": ["Montrer sur un exemple de détente l'intérêt d'autres modèles que celui de gaz parfait."],
+            "Transferts thermiques": ["Présenter et réaliser une expérience montrant l'influence de la longueur d'une barre conductrice thermique sur le temps caractéristique de diffusion."],
+            "Transitions de phase. Applications": ["Présenter une expérience mettant en évidence un changement de structure cristalline ou de comportement magnétique"],
+            "Transmission de l'information. Principes physiques": ["Discuter quantitativement, pour un support de transmission donné, des limitations dues à la dispersion et à l'atténuation des signaux."],
+            "Transport de l'énergie électrique": ["Comparer les avantages et les inconvénients de l'utilisation de signaux alternatifs et continus pour le transport sur de longues distances."]
+        };
+
+        // --- DONNÉES CHIMIE (COMPLÈTES) ---
+        const chemData = [
+            {n:"1ère G, spécialité PC", t:"De la structure à la polarité d'une entité", e:["Utiliser des modèles moléculaires ou des logiciels de représentation moléculaire pour visualiser la géométrie d'une entité"]},
+            {n:"1ère G, spécialité PC", t:"Solubilité et miscibilité des espèces chimiques", e:["Comparer la solubilité d'une espèce solide dans différents solvants", "Illustrer les propriétés des savons"]},
+            {n:"1ère G, spécialité PC", t:"Structure des entités organiques et identification des groupes", e:["Utiliser des modèles moléculaires ou des logiciels de représentation moléculaire pour visualiser la géométrie d'une entité"]},
+            {n:"1ère G, spécialité PC", t:"Suivi et modélisation de l'évolution d'un système chimique", e:["Déterminer expérimentalement la composition de l'état final d'un système et l'avancement final d'une réaction", "A l'aide d'un langage de programmation, déterminer la composition de l'état final d'un système siège d'une transformation chimique totale. (Avec script Python)"]},
+            {n:"1ère G, spécialité PC", t:"Synthèses d'espèces chimiques organiques", e:["Réaliser une chromatographie sur couche mince", "Réaliser une filtration, un lavage pour isoler et purifier une espèce chimique"]},
+            {n:"1ère ST2S", t:"Acides et bases", e:["Mettre en œuvre un protocole de neutralisation"]},
+            {n:"1ère ST2S", t:"Structure des molécules d'intérêt biologique", e:["Mettre en œuvre un protocole permettant de différencier les aldéhydes et les cétones", "Mettre en évidence les propriétés chimiques de la vitamine C en lien avec ses fonctions chimiques"]},
+            {n:"1ère STI2D, spécialité PCM", t:"Oxydo-réduction", e:["Réaliser une pile et étudier son fonctionnement", "Illustrer expérimentalement la protection contre la corrosion"]},
+            {n:"1ère STI2D, spécialité PCM", t:"Cinétique d'une réaction chimique", e:["Suivre expérimentalement l'évolution temporelle de la concentration d'un réactif ou d'un produit", "Mettre en évidence l'influence de la température sur la vitesse de disparition ou d'apparition."]},
+            {n:"1ère STI2D, spécialité PCM", t:"Réactions acido-basiques en solution aqueuse", e:["Préparer une solution tampon"]},
+            {n:"1ère STI2D, spécialité PCM", t:"Solvants et solutés", e:["Étudier l'influence de la température sur la solubilité d'une espèce chimique"]},
+            {n:"1ère STL, spécialité SPCL", t:"Dosages", e:["Estimer expérimentalement un Ka/pKa", "Réaliser un dosage par changement de couleur", "Réaliser un dosage par étalonnage"]},
+            {n:"1ère STL, spécialité SPCL", t:"Réactions de synthèse, sites électrophiles et nucléophiles...", e:["Réaliser un montage à reflux ; utiliser une ampoule de coulée", "Synthétiser un composé organique", "Effectuer et interpréter une chromatographie sur couche mince."]},
+            {n:"1ère STL, spécialité SPCL", t:"Synthèse d'un composé organique", e:["Réaliser une recristallisation.", "Réaliser une extraction par solvant.", "Utiliser un montage à reflux.", "Utiliser une ampoule de coulée."]},
+            {n:"TG, spécialité PC", t:"Comparer la force des acides et des bases", e:["Déterminer, à l'aide d'un langage de programmation, le taux d'avancement final d'une transformation, modélisée par la réaction d'un acide sur l'eau (Avec script Python)", "Estimer la valeur de la constante d'acidité d'un couple acide-base à l'aide d'une mesure de pH"]},
+            {n:"TG, spécialité PC", t:"Stratégie de synthèse multi-étapes", e:["Réaliser une estérification en optimisant les conditions opératoires", "Synthèse d'un amide", "Mettre en œuvre un protocole de synthèse conduisant à la modification d'un groupe caractéristique"]},
+            {n:"TG, spécialité PC", t:"Structure et propriétés des composés organiques", e:["Synthétiser un polymère"]},
+            {n:"TG, spécialité PC", t:"Équilibre chimique", e:["Mettre en évidence expérimentalement la notion d'équilibre"]},
+            {n:"TG, spécialité PC", t:"Forcer le sens d'évolution d'un système", e:["Identifier les produits formés lors du passage forcé d'un courant dans un électrolyseur. Relier la durée, l'intensité et les quantités de matière."]},
+            {n:"TG, spécialité PC", t:"Optimisation d'une étape de synthèse", e:["Mettre en œuvre un protocole de synthèse pour étudier l'influence de la modification des conditions expérimentales sur le rendement."]},
+            {n:"TG, spécialité PC", t:"Prévoir le sens de l'évolution spontanée d'un système chimique", e:["Mettre en évidence la présence de tous les réactifs dans l'état final d'un système siège d'une transformation non totale", "Déterminer la valeur du quotient de réaction à l'état final... et montrer son indépendance vis-à-vis de la composition initiale", "Réaliser une pile, déterminer sa tension à vide et la polarité, identifier la transformation, illustrer le rôle du pont salin"]},
+            {n:"TG, spécialité PC", t:"Réactions acides bases", e:["Réaliser un titrage d'une base dont le pKa du couple est inférieur à 10", "Mettre en évidence expérimentalement les propriétés d'une solution tampon"]},
+            {n:"TG, spécialité PC", t:"Suivi temporel et modélisation", e:["Tracer à l'aide d'un langage de programmation l'évolution temporelle d'une vitesse volumique... (Avec script Python)"]},
+            {n:"TG, spécialité PC", t:"Suivi temporel et modélisation d'un système chimique...", e:["Réaliser un suivi cinétique par conductimétrie", "Réaliser un suivi cinétique par spectrophotométrie", "Mettre en évidence les facteurs cinétiques"]},
+            {n:"T ST2S", t:"Lipides", e:["Fabriquer un savon"]},
+            {n:"T ST2S", t:"Méthodes chimiques d'analyse médicale", e:["Déterminer la concentration d'une espèce : glucose, fer, cuivre, etc."]},
+            {n:"T ST2S", t:"Principes de fonctionnement d'un airbag et d'un alcootest", e:["Déterminer expérimentalement le volume molaire d'un gaz"]},
+            {n:"T STI2D, spécialité PCM", t:"Oxydo-réduction", e:["Réaliser une pile et déterminer l'énergie totale stockée"]},
+            {n:"T STI2D, spécialité PCM", t:"Cinétique d'une réaction chimique", e:["Réaliser le suivi cinétique d'une transformation chimique et l'exploiter pour déterminer l'ordre de réaction."]},
+            {n:"T STI2D, spécialité PCM", t:"Energie chimique", e:["Estimer expérimentalement le pouvoir calorifique d'un combustible"]},
+            {n:"T STI2D, spécialité PCM", t:"Réactions acides bases", e:["Montrer expérimentalement l'invariance d'un pKA par spectrophotométrie"]},
+            {n:"T STI2D, spécialité PCM", t:"Réactions acido-basiques en solution aqueuse", e:["Réaliser une extraction ou une séparation faisant intervenir une espèce acide ou basique"]},
+            {n:"T STI2D, spécialité PCM", t:"Réactions d'oxydo-réduction", e:["Réaliser une pile et exploiter les résultats des mesures de tension"]},
+            {n:"T STI2D, spécialité PCM", t:"Structure spatiale des espèces chimiques", e:["Mettre en évidence les différences de propriétés chimiques de deux diastéréoisomères"]},
+            {n:"T STL, spécialité SPCL", t:"Diagrammes binaires liquide vapeur", e:["Réaliser une distillation fractionnée"]},
+            {n:"T STL, spécialité SPCL", t:"Estérification, hydrolyse, saponification", e:["Réaliser la synthèse d'un ester", "Réaliser une réaction de saponification"]},
+            {n:"T STL, spécialité SPCL", t:"Fonctions chimiques et transformations en chimie organique", e:["Utiliser un Dean Stark"]},
+            {n:"T STL, spécialité SPCL", t:"Mécanismes réactionnels", e:["Mettre en œuvre un exemple de catalyse homogène", "Mettre en œuvre un protocole pour différencier deux diastéréoisomères par un procédé physique", "Mettre en œuvre un protocole pour différencier deux diastéréoisomères par un procédé chimique"]},
+            {n:"T STL, spécialité SPCL", t:"Oxydo-réduction", e:["Réaliser un titrage potentiométrique"]},
+            {n:"T STL, spécialité SPCL", t:"Solubilité", e:["Mettre en œuvre un protocole pour extraire sélectivement des ions d'un mélange par précipitation"]},
+            {n:"T STL, spécialité SPCL", t:"Spectroscopies IR, RMN", e:["Réaliser une synthèse organique"]},
+            {n:"T STL, spécialité SPCL", t:"Spectroscopies UV-visible, IR", e:["Réaliser un dosage par étalonnage."]},
+            {n:"T STL, spécialité SPCL", t:"Spectroscopies UV-visible, RMN", e:["Réaliser un dosage par étalonnage."]},
+            {n:"T STL, spécialité SPCL", t:"Techniques de séparation en chimie organique", e:["Réaliser une hydrodistillation"]},
+            {n:"MP", t:"Cinétique électrochimique", e:["Mettre en œuvre un protocole expérimental de tracé de courbes courant-potentiel."]},
+            {n:"MP", t:"Corrosion", e:["Tracer des courbes courant potentiel et les exploiter qualitativement", "Mettre en œuvre une expérience pour mettre en évidence les facteurs influençant la corrosion", "Passiver un métal."]},
+            {n:"MP", t:"Deuxième principe de la thermodynamique...", e:["Déterminer expérimentalement des grandeurs de réaction"]},
+            {n:"MP", t:"Dispositifs électrochimiques", e:["Étudier le fonctionnement d'une pile pour effectuer des bilans électriques", "Étudier le fonctionnement d'un électrolyseur pour effectuer des bilans de matières et des bilans électriques", "Réaliser une électrolyse à anode soluble"]},
+            {n:"MP", t:"Premier principe de la thermodynamique...", e:["Calculer la température d'un système, siège d'une transformation adiabatique, après réaction... (Avec script Python)"]},
+            {n:"MPI", t:"Acides et bases, réactions acide-base", e:["Choisir et utiliser un indicateur coloré de fin de titrage dans le cas d'un titrage acide-base.", "Réaliser un titrage ayant pour réaction support une réaction acide-base. Étalonner une chaine de mesure si nécessaire.", "Interpréter et exploiter un diagramme de distribution. Tracer un diagramme de prédominance... (Avec script Python)"]},
+            {n:"MPI", t:"Oxydants et réducteurs, réactions d'oxydo-réduction", e:["Mettre en œuvre une pile et déterminer ses caractéristiques à vide ou en fonctionnement."]},
+            {n:"MPI", t:"Transformation chimique : modélisation, équilibre...", e:["Déterminer expérimentalement une constante thermodynamique d'équilibre.", "Mettre en œuvre une transformation totale et une transformation aboutissant à un état d'équilibre.", "Mettre en évidence expérimentalement le sens d'évolution d'un système chimique"]},
+            {n:"MPSI", t:"Acides et bases", e:["Mettre en œuvre une réaction acide-base pour réaliser une analyse quantitative en solution aqueuse", "Illustrer un procédé de traitement, de recyclage en solution"]},
+            {n:"MPSI", t:"Différents types de solides", e:["Illustrer expérimentalement des propriétés physiques des différents types de solides"]},
+            {n:"MPSI", t:"Dissolution et précipitation", e:["Illustrer un procédé de séparation en solution aqueuse", "Déterminer expérimentalement un produit de solubilité Ks", "Mettre en évidence expérimentalement des facteurs influençant la solubilité", "À l'aide d'un langage de programmation, déterminer les conditions optimales pour séparer deux ions par précipitation sélective (Avec script Python)"]},
+            {n:"MPSI", t:"Évolution temporelle d'un système chimique", e:["Déterminer l'énergie d'activation d'une réaction chimique"]},
+            {n:"MPSI", t:"Modèle du cristal parfait", e:["Utiliser un logiciel pour visualiser des mailles et des sites interstitiels", "Utiliser des modèles cristallins pour visualiser des mailles et des sites interstitiels", "Utiliser un logiciel ou des modèles cristallins pour déterminer des paramètres géométriques"]},
+            {n:"MPSI", t:"Potentiel d'électrode", e:["Réaliser une pile et étudier son fonctionnement"]},
+            {n:"MPSI", t:"Structure des entités chimiques", e:["Utiliser un logiciel de visualisation 3D des molécules"]},
+            {n:"PSI", t:"Conversion d'énergie électrique en énergie chimique", e:["Réaliser une électrolyse et effectuer des bilans de matière et des bilans électriques"]},
+            {n:"PSI", t:"Corrosion", e:["Mettre en œuvre une méthode de protection des métaux par anode sacrificielle ou par passivation"]},
+            {n:"PT", t:"Conversion d'énergie électrique en énergie chimique...", e:["Étudier le fonctionnement d'une pile pour effectuer des bilans électriques", "Étudier le fonctionnement d'un électrolyseur pour effectuer des bilans de matières et des bilans électriques"]},
+            {n:"PT", t:"Deuxième principe de la thermodynamique...", e:["Déterminer expérimentalement la composition chimique d'un système dans l'état final, dans les cas d'équilibres chimiques et de transformations totales"]},
+            {n:"PT", t:"Étude cinétique des réactions d'oxydo-réduction...", e:["Tracer et exploiter des courbes courant-potentiel"]},
+            {n:"PTSI", t:"Diagrammes potentiel-pH", e:["Mettre en œuvre une réaction de médiamutation"]},
+            {n:"PTSI", t:"Réactions acides bases", e:["Réaliser des titrages successif et simultanés", "Réaliser un titrage par suivi conductimétrique"]},
+            {n:"PTSI", t:"Réactions d'oxydo-réduction", e:["Réaliser un titrage indirect", "Réaliser une pile et étudier son fonctionnement"]},
+            {n:"PTSI", t:"Structure des entités chimiques", e:["Utiliser un logiciel de visualisation 3D des molécules"]},
+            {n:"TSI1", t:"Évolution temporelle d'un système Chimique", e:["Établir une loi de vitesse à partir du suivi temporel d'une grandeur physique", "Déterminer l'influence d'une concentration sur la vitesse d'une réaction chimique.", "Déterminer l'énergie d'activation d'une réaction chimique."]},
+            {n:"TSI1", t:"Transformation chimique d'un système", e:["Déterminer une constante thermodynamique d'équilibre à l'aide d'un titrage"]},
+            {n:"TSI2", t:"Approche thermodynamique du fonctionnement d'une pile...", e:["Déterminer une constante thermodynamique par l'étude de piles"]},
+            {n:"TSI2", t:"Diagrammes potentiel-pH", e:["Réaliser un dosage en s'appuyant sur des diagrammes potentiel-pH"]},
+            {n:"TSI2", t:"Optimisation d'un procédé chimique", e:["Réaliser une expérience mettant en évidence un paramètre d'influence sur un procédé chimique"]},
+            {n:"TSI2", t:"Thermodynamique d'un système...", e:["Déterminer expérimentalement l'évolution de la valeur d'une constante thermodynamique d'équilibre en fonction de la température"]}
+        ];
+
+        // --- DONNÉES MONTAGES ---
+        const montageData = [
+            {c:"M1", t:"Mesure de longueurs"}, {c:"M2", t:"Mesure de vitesses"}, {c:"M3", t:"Mesure d'accélérations"},
+            {c:"M4", t:"Mesure de masses"}, {c:"M5", t:"Mesure de températures"}, {c:"M6", t:"Mesure de pressions"},
+            {c:"M7", t:"Mesure de capacités"}, {c:"M8", t:"Mesure de coefficients d'induction"}, {c:"M9", t:"Mesure de rendements"},
+            {c:"M10", t:"Mesures par opposition (ou mesure à l'équilibre)"}, {c:"M11", t:"Mesure physique dans le domaine médical"},
+            {c:"M12", t:"Contrôle non destructif"}, {c:"M13", t:"Illustration de quelques lois de la dynamique newtonienne"},
+            {c:"M14", t:"Frottements"}, {c:"M15", t:"Dynamique du solide en rotation"}, {c:"M16", t:"Référentiels non galiléens"},
+            {c:"M17", t:"Propriétés mécaniques des matériaux"}, {c:"M18", t:"Instabilités"}, {c:"M19", t:"Phénomènes non-linéaires"},
+            {c:"M20", t:"Caractérisation de différents types d'écoulements"}, {c:"M21", t:"Viscosité"}, {c:"M22", t:"Tension superficielle - Aspects statiques et dynamiques"},
+            {c:"M23", t:"Ondes acoustiques"}, {c:"M24", t:"Transitions de phase"}, {c:"M25", t:"Phénomènes de transport"},
+            {c:"M26", t:"Transferts thermiques"}, {c:"M27", t:"Rayonnement thermique"}, {c:"M28", t:"Formation des images et instruments d'optique"},
+            {c:"M29", t:"Photographie numérique : optique, capteur"}, {c:"M30", t:"Diffraction des ondes lumineuses - Filtrage"},
+            {c:"M31", t:"Interférences lumineuses"}, {c:"M32", t:"Interférences à ondes multiples"}, {c:"M33", t:"Spectrométrie optique"},
+            {c:"M34", t:"Émission et absorption de la lumière"}, {c:"M35", t:"Photorécepteurs"}, {c:"M36", t:"Polarisation des ondes électromagnétiques"},
+            {c:"M37", t:"Biréfringence, pouvoir rotatoire"}, {c:"M38", t:"Régimes transitoires"}, {c:"M39", t:"Résonances"},
+            {c:"M40", t:"Modes propres"}, {c:"M41", t:"Ondes : propagation et conditions aux limites"}, {c:"M42", t:"Propagation guidée"},
+            {c:"M43", t:"Réfraction et réflexion des ondes"}, {c:"M44", t:"Production et mesure de champs magnétiques"},
+            {c:"M45", t:"Milieux magnétiques"}, {c:"M46", t:"Métaux"}, {c:"M47", t:"Matériaux semi-conducteurs"},
+            {c:"M48", t:"Conversion électromécanique"}, {c:"M49", t:"Production et conversion d'énergie électrique"},
+            {c:"M50", t:"Haut-parleur"}, {c:"M51", t:"Mise en forme, transport et détection de l'information"},
+            {c:"M52", t:"Amplification de signaux"}, {c:"M53", t:"Signal et bruit"}, {c:"M54", t:"Numérisation du signal"},
+            {c:"M55", t:"Mesures physiques par traitement d'image"}, {c:"M56", t:"Capteurs à effets capacitifs"},
+            {c:"M57", t:"Phénomènes d'induction – applications"}, {c:"M58", t:"Détection synchrone"},
+            {c:"M59", t:"Microcontrôleurs : applications et limites"}
+        ];
+
+        // --- NAVIGATION ---
+        function openMode(mode) {
+            document.getElementById('menu').style.display = 'none';
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            
+            if(mode === 'physique') {
+                document.getElementById('screen-physique').classList.add('active');
+                drawPhysique();
+            } else if (mode === 'chimie') {
+                document.getElementById('screen-chimie').classList.add('active');
+                drawChimie();
+            } else if (mode === 'montage') {
+                document.getElementById('screen-montage').classList.add('active');
+                drawMontage();
+            }
+        }
+
+        function goHome() {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('menu').style.display = 'flex';
+        }
+
+        // --- TIRAGE PHYSIQUE ---
+        function drawPhysique() {
+            const keys = Object.keys(physicsData);
+            const randomKey = keys[Math.floor(Math.random() * keys.length)];
+            const passages = physicsData[randomKey];
+            const randomPassage = passages[Math.floor(Math.random() * passages.length)];
+            
+            document.getElementById('phys-title').innerText = randomKey;
+            document.getElementById('phys-po').innerText = randomPassage;
+        }
+
+        // --- TIRAGE CHIMIE ---
+        function drawChimie() {
+            const item = chemData[Math.floor(Math.random() * chemData.length)];
+            const element = item.e[Math.floor(Math.random() * item.e.length)];
+            
+            document.getElementById('chem-level').innerText = item.n;
+            document.getElementById('chem-title').innerText = item.t;
+            document.getElementById('chem-element').innerText = element;
+        }
+
+        // --- TIRAGE MONTAGE ---
+        function drawMontage() {
+            const item = montageData[Math.floor(Math.random() * montageData.length)];
+            
+            document.getElementById('mont-code').innerText = item.c;
+            document.getElementById('mont-title').innerText = item.t;
+        }
+
+    </script>
+</body>
+</html>
