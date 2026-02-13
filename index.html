@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Agreg 2026 Générateur Leçons</title>
+    <title>Agreg 2026 Trainer</title>
     <style>
         :root {
             --physique-color: #0056b3;
@@ -261,7 +261,7 @@
             "Transport de l'énergie électrique": ["Comparer les avantages et les inconvénients de l'utilisation de signaux alternatifs et continus pour le transport sur de longues distances."]
         };
 
-        // --- DONNÉES CHIMIE (COMPLÈTES) ---
+        // --- DONNÉES CHIMIE (COMPLÈTES ET CORRIGÉES) ---
         const chemData = [
             {n:"1ère G, spécialité PC", t:"De la structure à la polarité d'une entité", e:["Utiliser des modèles moléculaires ou des logiciels de représentation moléculaire pour visualiser la géométrie d'une entité"]},
             {n:"1ère G, spécialité PC", t:"Solubilité et miscibilité des espèces chimiques", e:["Comparer la solubilité d'une espèce solide dans différents solvants", "Illustrer les propriétés des savons"]},
@@ -283,10 +283,10 @@
             {n:"TG, spécialité PC", t:"Équilibre chimique", e:["Mettre en évidence expérimentalement la notion d'équilibre"]},
             {n:"TG, spécialité PC", t:"Forcer le sens d'évolution d'un système", e:["Identifier les produits formés lors du passage forcé d'un courant dans un électrolyseur. Relier la durée, l'intensité et les quantités de matière."]},
             {n:"TG, spécialité PC", t:"Optimisation d'une étape de synthèse", e:["Mettre en œuvre un protocole de synthèse pour étudier l'influence de la modification des conditions expérimentales sur le rendement."]},
-            {n:"TG, spécialité PC", t:"Prévoir le sens de l'évolution spontanée d'un système chimique", e:["Mettre en évidence la présence de tous les réactifs dans l'état final d'un système siège d'une transformation non totale", "Déterminer la valeur du quotient de réaction à l'état final... et montrer son indépendance vis-à-vis de la composition initiale", "Réaliser une pile, déterminer sa tension à vide et la polarité, identifier la transformation, illustrer le rôle du pont salin"]},
+            {n:"TG, spécialité PC", t:"Prévoir le sens de l'évolution spontanée d'un système chimique", e:["Mettre en évidence la présence de tous les réactifs dans l'état final d'un système siège d'une transformation non totale", "Déterminer la valeur du quotient de réaction à l'état final d'un système, siège d'une transformation non totale, et montrer son indépendance vis-à-vis de la composition initiale du système à une température donnée", "Réaliser une pile, déterminer sa tension à vide et la polarité des électrodes, identifier la transformation mise en jeu, illustrer le rôle du pont salin"]},
             {n:"TG, spécialité PC", t:"Réactions acides bases", e:["Réaliser un titrage d'une base dont le pKa du couple est inférieur à 10", "Mettre en évidence expérimentalement les propriétés d'une solution tampon"]},
-            {n:"TG, spécialité PC", t:"Suivi temporel et modélisation", e:["Tracer à l'aide d'un langage de programmation l'évolution temporelle d'une vitesse volumique... (Avec script Python)"]},
-            {n:"TG, spécialité PC", t:"Suivi temporel et modélisation d'un système chimique...", e:["Réaliser un suivi cinétique par conductimétrie", "Réaliser un suivi cinétique par spectrophotométrie", "Mettre en évidence les facteurs cinétiques"]},
+            {n:"TG, spécialité PC", t:"Suivi temporel et modélisation", e:["Tracer à l'aide d'un langage de programmation l'évolution temporelle d'une vitesse volumique de formation ou de consommation obtenue de façon expérimentale (Cette leçon est accompagnée du script d'un programme écrit en langage python)"]},
+            {n:"TG, spécialité PC", t:"Suivi temporel et modélisation d'un système chimique, siège d'une transformation", e:["Réaliser un suivi cinétique par conductimétrie", "Réaliser un suivi cinétique par spectrophotométrie", "Mettre en évidence les facteurs cinétiques"]},
             {n:"T ST2S", t:"Lipides", e:["Fabriquer un savon"]},
             {n:"T ST2S", t:"Méthodes chimiques d'analyse médicale", e:["Déterminer la concentration d'une espèce : glucose, fer, cuivre, etc."]},
             {n:"T ST2S", t:"Principes de fonctionnement d'un airbag et d'un alcootest", e:["Déterminer expérimentalement le volume molaire d'un gaz"]},
@@ -309,34 +309,34 @@
             {n:"T STL, spécialité SPCL", t:"Techniques de séparation en chimie organique", e:["Réaliser une hydrodistillation"]},
             {n:"MP", t:"Cinétique électrochimique", e:["Mettre en œuvre un protocole expérimental de tracé de courbes courant-potentiel."]},
             {n:"MP", t:"Corrosion", e:["Tracer des courbes courant potentiel et les exploiter qualitativement", "Mettre en œuvre une expérience pour mettre en évidence les facteurs influençant la corrosion", "Passiver un métal."]},
-            {n:"MP", t:"Deuxième principe de la thermodynamique...", e:["Déterminer expérimentalement des grandeurs de réaction"]},
+            {n:"MP", t:"Deuxième principe de la thermodynamique appliqué aux transformations physico-chimiques", e:["Déterminer expérimentalement des grandeurs de réaction"]},
             {n:"MP", t:"Dispositifs électrochimiques", e:["Étudier le fonctionnement d'une pile pour effectuer des bilans électriques", "Étudier le fonctionnement d'un électrolyseur pour effectuer des bilans de matières et des bilans électriques", "Réaliser une électrolyse à anode soluble"]},
-            {n:"MP", t:"Premier principe de la thermodynamique...", e:["Calculer la température d'un système, siège d'une transformation adiabatique, après réaction... (Avec script Python)"]},
-            {n:"MPI", t:"Acides et bases, réactions acide-base", e:["Choisir et utiliser un indicateur coloré de fin de titrage dans le cas d'un titrage acide-base.", "Réaliser un titrage ayant pour réaction support une réaction acide-base. Étalonner une chaine de mesure si nécessaire.", "Interpréter et exploiter un diagramme de distribution. Tracer un diagramme de prédominance... (Avec script Python)"]},
+            {n:"MP", t:"Premier principe de la thermodynamique appliqué aux transformations physico-chimiques", e:["Calculer la température d'un système, siège d'une transformation adiabatique, après réaction en fonction de l'avancement (Cette leçon est accompagnée du script d'un programme écrit en langage python)"]},
+            {n:"MPI", t:"Acides et bases, réactions acide-base", e:["Choisir et utiliser un indicateur coloré de fin de titrage dans le cas d'un titrage acide-base.", "Réaliser un titrage ayant pour réaction support une réaction acide-base. Étalonner une chaine de mesure si nécessaire.", "Interpréter et exploiter un diagramme de distribution. Tracer un diagramme de prédominance à l'aide d'un langage de programmation (Cette leçon est accompagnée du script d'un programme écrit en langage python)"]},
             {n:"MPI", t:"Oxydants et réducteurs, réactions d'oxydo-réduction", e:["Mettre en œuvre une pile et déterminer ses caractéristiques à vide ou en fonctionnement."]},
-            {n:"MPI", t:"Transformation chimique : modélisation, équilibre...", e:["Déterminer expérimentalement une constante thermodynamique d'équilibre.", "Mettre en œuvre une transformation totale et une transformation aboutissant à un état d'équilibre.", "Mettre en évidence expérimentalement le sens d'évolution d'un système chimique"]},
+            {n:"MPI", t:"Transformation chimique : modélisation, équilibre chimique, évolution d'un système chimique", e:["Déterminer expérimentalement une constante thermodynamique d'équilibre.", "Mettre en œuvre une transformation totale et une transformation aboutissant à un état d'équilibre.", "Mettre en évidence expérimentalement le sens d'évolution d'un système chimique"]},
             {n:"MPSI", t:"Acides et bases", e:["Mettre en œuvre une réaction acide-base pour réaliser une analyse quantitative en solution aqueuse", "Illustrer un procédé de traitement, de recyclage en solution"]},
             {n:"MPSI", t:"Différents types de solides", e:["Illustrer expérimentalement des propriétés physiques des différents types de solides"]},
-            {n:"MPSI", t:"Dissolution et précipitation", e:["Illustrer un procédé de séparation en solution aqueuse", "Déterminer expérimentalement un produit de solubilité Ks", "Mettre en évidence expérimentalement des facteurs influençant la solubilité", "À l'aide d'un langage de programmation, déterminer les conditions optimales pour séparer deux ions par précipitation sélective (Avec script Python)"]},
+            {n:"MPSI", t:"Dissolution et précipitation", e:["Illustrer un procédé de séparation en solution aqueuse", "Déterminer expérimentalement un produit de solubilité Ks", "Mettre en évidence expérimentalement des facteurs influençant la solubilité", "À l'aide d'un langage de programmation, déterminer les conditions optimales pour séparer deux ions par précipitation sélective (Cette leçon est accompagnée du script d'un programme écrit en langage python)"]},
             {n:"MPSI", t:"Évolution temporelle d'un système chimique", e:["Déterminer l'énergie d'activation d'une réaction chimique"]},
             {n:"MPSI", t:"Modèle du cristal parfait", e:["Utiliser un logiciel pour visualiser des mailles et des sites interstitiels", "Utiliser des modèles cristallins pour visualiser des mailles et des sites interstitiels", "Utiliser un logiciel ou des modèles cristallins pour déterminer des paramètres géométriques"]},
             {n:"MPSI", t:"Potentiel d'électrode", e:["Réaliser une pile et étudier son fonctionnement"]},
             {n:"MPSI", t:"Structure des entités chimiques", e:["Utiliser un logiciel de visualisation 3D des molécules"]},
             {n:"PSI", t:"Conversion d'énergie électrique en énergie chimique", e:["Réaliser une électrolyse et effectuer des bilans de matière et des bilans électriques"]},
             {n:"PSI", t:"Corrosion", e:["Mettre en œuvre une méthode de protection des métaux par anode sacrificielle ou par passivation"]},
-            {n:"PT", t:"Conversion d'énergie électrique en énergie chimique...", e:["Étudier le fonctionnement d'une pile pour effectuer des bilans électriques", "Étudier le fonctionnement d'un électrolyseur pour effectuer des bilans de matières et des bilans électriques"]},
-            {n:"PT", t:"Deuxième principe de la thermodynamique...", e:["Déterminer expérimentalement la composition chimique d'un système dans l'état final, dans les cas d'équilibres chimiques et de transformations totales"]},
-            {n:"PT", t:"Étude cinétique des réactions d'oxydo-réduction...", e:["Tracer et exploiter des courbes courant-potentiel"]},
+            {n:"PT", t:"Conversion d'énergie électrique en énergie chimique et réciproquement", e:["Étudier le fonctionnement d'une pile pour effectuer des bilans électriques", "Étudier le fonctionnement d'un électrolyseur pour effectuer des bilans de matières et des bilans électriques"]},
+            {n:"PT", t:"Deuxième principe de la thermodynamique appliqué aux transformations physico-chimiques", e:["Déterminer expérimentalement la composition chimique d'un système dans l'état final, dans les cas d'équilibres chimiques et de transformations totales"]},
+            {n:"PT", t:"Étude cinétique des réactions d'oxydo-réduction : courbes courant-potentiel", e:["Tracer et exploiter des courbes courant-potentiel"]},
             {n:"PTSI", t:"Diagrammes potentiel-pH", e:["Mettre en œuvre une réaction de médiamutation"]},
             {n:"PTSI", t:"Réactions acides bases", e:["Réaliser des titrages successif et simultanés", "Réaliser un titrage par suivi conductimétrique"]},
             {n:"PTSI", t:"Réactions d'oxydo-réduction", e:["Réaliser un titrage indirect", "Réaliser une pile et étudier son fonctionnement"]},
             {n:"PTSI", t:"Structure des entités chimiques", e:["Utiliser un logiciel de visualisation 3D des molécules"]},
             {n:"TSI1", t:"Évolution temporelle d'un système Chimique", e:["Établir une loi de vitesse à partir du suivi temporel d'une grandeur physique", "Déterminer l'influence d'une concentration sur la vitesse d'une réaction chimique.", "Déterminer l'énergie d'activation d'une réaction chimique."]},
             {n:"TSI1", t:"Transformation chimique d'un système", e:["Déterminer une constante thermodynamique d'équilibre à l'aide d'un titrage"]},
-            {n:"TSI2", t:"Approche thermodynamique du fonctionnement d'une pile...", e:["Déterminer une constante thermodynamique par l'étude de piles"]},
+            {n:"TSI2", t:"Approche thermodynamique du fonctionnement d'une pile électrochimique", e:["Déterminer une constante thermodynamique par l'étude de piles"]},
             {n:"TSI2", t:"Diagrammes potentiel-pH", e:["Réaliser un dosage en s'appuyant sur des diagrammes potentiel-pH"]},
             {n:"TSI2", t:"Optimisation d'un procédé chimique", e:["Réaliser une expérience mettant en évidence un paramètre d'influence sur un procédé chimique"]},
-            {n:"TSI2", t:"Thermodynamique d'un système...", e:["Déterminer expérimentalement l'évolution de la valeur d'une constante thermodynamique d'équilibre en fonction de la température"]}
+            {n:"TSI2", t:"Thermodynamique d'un système, siège d'une transformation chimique : équilibre chimique", e:["Déterminer expérimentalement l'évolution de la valeur d'une constante thermodynamique d'équilibre en fonction de la température"]}
         ];
 
         // --- DONNÉES MONTAGES ---
